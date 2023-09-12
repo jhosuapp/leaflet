@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite App</title>
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  </head>
+  <body>
+    <main>
+      <!-- Map -->
+      <article class="map">
+          <div class="map__loader">
+              <picture>
+                  <img src="./img/cloud-dark.svg" alt="">
+              </picture>
+              <p>Cargando estadísticas...</p>
+          </div>
+          <div class="map__legend">
+              <div class="progress-bar"></div>
+              <div class="percent">
+                  <p class="secondary">0%</p>
+                  <p class="secondary">100%</p>
+              </div>
+          </div>
+          <div class="map__content enable" id="map"></div>
+      </article>
+      <!-- Fin map -->
+    </main>
+    <script type="module" src="./js/mainscript.js"></script> 
+  </body>
+</html>
