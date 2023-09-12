@@ -85,8 +85,10 @@ const Map = (()=>{
         const getLegend = document.querySelector('.map__legend');
         conectApi('./lib/countries.geojson')
             .then((data)=>{
-                getLegend.classList.add('active');
-                _MapConfig(data);
+                setTimeout(()=>{
+                    getLegend.classList.add('active');
+                    _MapConfig(data);
+                },1000);
             });
     }
 

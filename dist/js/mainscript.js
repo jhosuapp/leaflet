@@ -15,7 +15,7 @@ var f = (a, e, o) => new Promise((r, d) => {
   }, s = (n) => n.done ? r(n.value) : Promise.resolve(n.value).then(u, p);
   s((o = o.apply(a, e)).next());
 });
-var T = y((g) => {
+var _ = y((g) => {
   const b = (a) => f(g, null, function* () {
     return yield (yield fetch(a)).json();
   }), v = (() => {
@@ -59,7 +59,9 @@ var T = y((g) => {
     }), e = () => {
       const o = document.querySelector(".map__legend");
       b("./lib/countries.geojson").then((r) => {
-        o.classList.add("active"), a(r);
+        setTimeout(() => {
+          o.classList.add("active"), a(r);
+        }, 1e3);
       });
     };
     return {
@@ -71,12 +73,12 @@ var T = y((g) => {
         }
       }
     };
-  })(), _ = () => {
+  })(), T = () => {
     v.setHandleEvent();
   };
   window.addEventListener("load", () => {
-    _();
+    T();
   });
 });
-export default T();
+export default _();
 //# sourceMappingURL=mainscript.js.map
