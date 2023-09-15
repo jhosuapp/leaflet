@@ -1,0 +1,47 @@
+[
+    {
+        "region_code": "CO-SA",
+        "name": "San andres",
+        "population": 5000 
+    },
+    {
+        "region_code": "CO-CA",
+        "name": "Cauca",
+        "population": 4200 
+    },
+    {
+        "region_code": "CO-NA",
+        "name": "Nariño",
+        "population": 2400 
+    },
+    {
+        "region_code": "CO-CH",
+        "name": "Chocó",
+        "population": 1000 
+    },
+    {
+        "region_code": "CO-TO",
+        "name": "Tolima",
+        "population": 500 
+    },
+    {
+        "region_code": "CO-CQ",
+        "name": "Caquetá",
+        "population": 5000 
+    },
+    {
+        "region_code": "CO-HU",
+        "name": "Huila",
+        "population": 2500 
+    },
+    {
+        "region_code": "CO-PU",
+        "name": "Putumayo",
+        "population": 0 
+    },
+    {
+        "region_code": "CO-AM",
+        "name": "Amazonas",
+        "population": 3100
+    }
+]

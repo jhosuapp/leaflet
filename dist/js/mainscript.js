@@ -1,29 +1,29 @@
-var y = (a, e) => () => (e || a((e = { exports: {} }).exports, e), e.exports);
-var f = (a, e, o) => new Promise((r, d) => {
-  var u = (n) => {
+var b = (i, a) => () => (a || i((a = { exports: {} }).exports, a), a.exports);
+var f = (i, a, t) => new Promise((d, e) => {
+  var c = (n) => {
     try {
-      s(o.next(n));
-    } catch (i) {
-      d(i);
+      r(t.next(n));
+    } catch (s) {
+      e(s);
     }
-  }, p = (n) => {
+  }, l = (n) => {
     try {
-      s(o.throw(n));
-    } catch (i) {
-      d(i);
+      r(t.throw(n));
+    } catch (s) {
+      e(s);
     }
-  }, s = (n) => n.done ? r(n.value) : Promise.resolve(n.value).then(u, p);
-  s((o = o.apply(a, e)).next());
+  }, r = (n) => n.done ? d(n.value) : Promise.resolve(n.value).then(c, l);
+  r((t = t.apply(i, a)).next());
 });
-var _ = y((g) => {
-  const b = (a) => f(g, null, function* () {
-    return yield (yield fetch(a)).json();
+var E = b((g) => {
+  const w = (i) => f(g, null, function* () {
+    return yield (yield fetch(i)).json();
   }), v = (() => {
-    const a = (o, r = 0, d = 0, u = 0) => f(g, null, function* () {
-      function p(t) {
-        const { population: l } = t.properties;
+    const i = (t, d = 0, e = 0, c = 0) => f(g, null, function* () {
+      function l(o) {
+        const { population: u } = o.properties;
         return {
-          fillColor: s(l),
+          fillColor: r(u),
           weight: 1,
           opacity: 1,
           color: "white",
@@ -31,54 +31,71 @@ var _ = y((g) => {
           fillOpacity: 0.9
         };
       }
-      function s(t) {
-        return t > 6e7 ? "#800026" : t > 5e7 ? "#BD0026" : (t > 4e7, "#002345");
+      function r(o) {
+        return o > 6e7 ? "#800026" : o > 5e7 ? "#BD0026" : (o > 4e7, "#002345");
       }
       const n = L.map("map", {
-        center: [r, d],
-        zoom: u,
+        center: [d, e],
+        zoom: c,
         minZoom: 2
       });
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(n);
-      const i = yield L.geoJson(o, { style: p }).addTo(n), c = yield L.control();
-      c.onAdd = function(t) {
+      const s = yield L.geoJson(t, { style: l }).addTo(n), p = yield L.control();
+      p.onAdd = function(o) {
         return this._div = L.DomUtil.create("div", "info-control"), this.update(), this._div;
-      }, c.update = function(t) {
-        this._div.innerHTML = t ? `<strong>${t.ADMIN ? t.ADMIN : t.NOMBRE_DPT}</strong><br>Poblaci\xF3n:${t.population}` : "Pasa el cursor sobre un \xE1rea";
-      }, yield c.addTo(n), i.eachLayer(function(t) {
-        const { population: l, ADMIN: h, NOMBRE_DPT: m } = t.feature.properties;
-        t.on("mouseover", function(w) {
-          const M = w.target.feature.properties;
-          c.update(M);
-        }), t.on("mouseout", function() {
-          c.update();
-        }), t.bindPopup(`<strong>${h || m}</strong><br>Poblaci\xF3n:${l}`);
+      }, p.update = function(o) {
+        this._div.innerHTML = o ? `<strong>${o.name}</strong><br>Poblaci\xF3n:${o.population}` : "Pasa el cursor sobre un \xE1rea";
+      }, yield p.addTo(n), s.eachLayer(function(o) {
+        const { population: u, name: m } = o.feature.properties;
+        o.on("mouseover", function(h) {
+          const y = h.target.feature.properties;
+          p.update(y);
+        }), o.on("mouseout", function() {
+          p.update();
+        }), o.bindPopup(`<strong>${m}</strong><br>Poblaci\xF3n:${u}`);
       });
-    }), e = () => {
-      const o = document.querySelector(".map__legend");
-      b("./lib/countries.geojson").then((r) => {
-        setTimeout(() => {
-          o.classList.add("active"), a(r);
-        }, 1e3);
+    }), a = () => f(g, null, function* () {
+      yield w("./lib/colombia-country.geojson").then((t) => {
+        console.log(t);
+        const { features: d } = t;
+        d.forEach((e) => {
+          const { properties: c } = e;
+          c["hc-key"] = c.region_code;
+        }), w("./lib/colombia-test-endpoint.json").then((e) => {
+          const c = [];
+          e.forEach((l) => {
+            const { region_code: r, name: n, population: s } = l, { features: p } = t;
+            p.forEach((u) => {
+              const { properties: { region_code: m }, properties: h } = u;
+              r == m && (h.name = n, h.population = s);
+            });
+            const o = [];
+            o.push(r, s), c.push(o);
+          }), console.log(c), i(t, 4.710989, -74.072092, 5), getLoader.remove(), getLegend.classList.add("active");
+        }).catch((e) => {
+          console.log(e + "second fetch");
+        });
+      }).catch((t) => {
+        console.log(t + "fitst fetch");
       });
-    };
+    });
     return {
       setHandleEvent: function() {
         try {
-          e();
-        } catch (o) {
-          console.log(o);
+          a();
+        } catch (t) {
+          console.log(t);
         }
       }
     };
-  })(), T = () => {
+  })(), _ = () => {
     v.setHandleEvent();
   };
   window.addEventListener("load", () => {
-    T();
+    _();
   });
 });
-export default _();
+export default E();
 //# sourceMappingURL=mainscript.js.map

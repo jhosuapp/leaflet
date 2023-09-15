@@ -53,7 +53,7 @@ const Map = (()=>{
         //Method for update info control
         infoControl.update = function(props) {
             this._div.innerHTML = props ?
-                `<strong>${props.ADMIN ? props.ADMIN : props.NOMBRE_DPT}</strong><br>Población:${props.population}` :
+                `<strong>${props.name}</strong><br>Población:${props.population}` :
                 'Pasa el cursor sobre un área';
         };
 
@@ -62,7 +62,7 @@ const Map = (()=>{
 
         // Add popups depending on the population of each country
         geojsonLayer.eachLayer(function(layer) {
-            const { population, ADMIN, NOMBRE_DPT } = layer.feature.properties;   
+            const { population, name } = layer.feature.properties;   
 
             //Update in real time data of countries
             layer.on('mouseover', function(e) {
@@ -74,22 +74,55 @@ const Map = (()=>{
             });
 
             // Open popup
-            layer.bindPopup(`<strong>${ADMIN ? ADMIN : NOMBRE_DPT}</strong><br>Población:${population}`);
+            layer.bindPopup(`<strong>${name}</strong><br>Población:${population}`);
         });
     }
 
     /*
     *Enable map
     */
-    const _MapEnableHome = ()=>{
-        const getLegend = document.querySelector('.map__legend');
-        conectApi('./lib/countries.geojson')
-            .then((data)=>{
-                setTimeout(()=>{
-                    getLegend.classList.add('active');
-                    _MapConfig(data);
-                },1000);
-            });
+    const _MapEnableHome = async()=>{
+        await conectApi('./lib/colombia-country.geojson')
+        .then((geoJson)=>{
+                console.log(geoJson);
+                //Add new parameter with hc-key
+                const { features } = geoJson;
+                features.forEach((getData)=>{
+                    const { properties } = getData;
+                    properties['hc-key'] = properties.region_code;
+                });
+                //Conect to Endpoint with data dinamic
+                conectApi('./lib/colombia-test-endpoint.json')
+                    .then((dataMap)=>{
+                            //Filter and compare data
+                            const arrayWithData = [];
+                            dataMap.forEach((regionEndpoint)=>{
+                                const { region_code:region_code_endpoint, name, population } = regionEndpoint;
+                                const { features } = geoJson;
+                                features.forEach((dataProperties)=>{
+                                    const { properties:{region_code}, properties } = dataProperties;
+                                    if(region_code_endpoint == region_code){
+                                        properties.name = name;
+                                        properties.population = population;
+                                    }
+                                });
+                                const createNewArr = [];
+                                createNewArr.push(region_code_endpoint, population);
+                                arrayWithData.push(createNewArr);
+                            });
+                            console.log(arrayWithData);
+                            //Compare region_code and asign values dinamics of endpoint
+                            _MapConfig(geoJson, 4.710989, -74.072092, 5, 5);
+                            //Remove loader
+                            getLoader.remove();
+                            getLegend.classList.add('active');
+                        }).catch((err)=>{
+                            console.log(err + 'second fetch');
+                        });
+
+        }).catch((err)=>{
+            console.log(err + 'fitst fetch');
+        });
     }
 
 
